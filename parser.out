@@ -1,0 +1,262 @@
+Created by PLY version 3.11 (http://www.dabeaz.com/ply)
+
+Unused terminals:
+
+    DIFERENTE
+    DIRCHAVE
+    DIRPARENTESE
+    DIVISAO
+    ENQUANTO
+    ENTAO
+    ENTRE
+    ESCREVA
+    ESQCHAVE
+    ESQPARENTESE
+    FAIXA
+    FOR
+    IGUALDADE
+    LEIA
+    MAIOR
+    MAIORIGUAL
+    MENOR
+    MENORIGUAL
+    MULTIPLICACAO
+    SE
+    SUBTRACAO
+    VIRGULA
+
+Grammar
+
+Rule 0     S' -> programa
+Rule 1     programa -> programa expression
+Rule 2     programa -> <empty>
+Rule 3     expression -> VARIAVEL IGUAL valor FINALEXPRESSAO
+Rule 4     valor -> INTEIRO
+Rule 5     valor -> DECIMAL
+Rule 6     valor -> FRASE
+Rule 7     expression -> expression ADICAO term
+Rule 8     expression -> term
+Rule 9     term -> INTEIRO
+Rule 10    term -> DECIMAL
+Rule 11    term -> FRASE
+
+Terminals, with rules where they appear
+
+ADICAO               : 7
+DECIMAL              : 5 10
+DIFERENTE            : 
+DIRCHAVE             : 
+DIRPARENTESE         : 
+DIVISAO              : 
+ENQUANTO             : 
+ENTAO                : 
+ENTRE                : 
+ESCREVA              : 
+ESQCHAVE             : 
+ESQPARENTESE         : 
+FAIXA                : 
+FINALEXPRESSAO       : 3
+FOR                  : 
+FRASE                : 6 11
+IGUAL                : 3
+IGUALDADE            : 
+INTEIRO              : 4 9
+LEIA                 : 
+MAIOR                : 
+MAIORIGUAL           : 
+MENOR                : 
+MENORIGUAL           : 
+MULTIPLICACAO        : 
+SE                   : 
+SUBTRACAO            : 
+VARIAVEL             : 3
+VIRGULA              : 
+error                : 
+
+Nonterminals, with rules where they appear
+
+expression           : 1 7
+programa             : 1 0
+term                 : 7 8
+valor                : 3
+
+Parsing method: LALR
+
+state 0
+
+    (0) S' -> . programa
+    (1) programa -> . programa expression
+    (2) programa -> .
+
+    VARIAVEL        reduce using rule 2 (programa -> .)
+    INTEIRO         reduce using rule 2 (programa -> .)
+    DECIMAL         reduce using rule 2 (programa -> .)
+    FRASE           reduce using rule 2 (programa -> .)
+    $end            reduce using rule 2 (programa -> .)
+
+    programa                       shift and go to state 1
+
+state 1
+
+    (0) S' -> programa .
+    (1) programa -> programa . expression
+    (3) expression -> . VARIAVEL IGUAL valor FINALEXPRESSAO
+    (7) expression -> . expression ADICAO term
+    (8) expression -> . term
+    (9) term -> . INTEIRO
+    (10) term -> . DECIMAL
+    (11) term -> . FRASE
+
+    VARIAVEL        shift and go to state 3
+    INTEIRO         shift and go to state 5
+    DECIMAL         shift and go to state 6
+    FRASE           shift and go to state 7
+
+    expression                     shift and go to state 2
+    term                           shift and go to state 4
+
+state 2
+
+    (1) programa -> programa expression .
+    (7) expression -> expression . ADICAO term
+
+    VARIAVEL        reduce using rule 1 (programa -> programa expression .)
+    INTEIRO         reduce using rule 1 (programa -> programa expression .)
+    DECIMAL         reduce using rule 1 (programa -> programa expression .)
+    FRASE           reduce using rule 1 (programa -> programa expression .)
+    $end            reduce using rule 1 (programa -> programa expression .)
+    ADICAO          shift and go to state 8
+
+
+state 3
+
+    (3) expression -> VARIAVEL . IGUAL valor FINALEXPRESSAO
+
+    IGUAL           shift and go to state 9
+
+
+state 4
+
+    (8) expression -> term .
+
+    ADICAO          reduce using rule 8 (expression -> term .)
+    VARIAVEL        reduce using rule 8 (expression -> term .)
+    INTEIRO         reduce using rule 8 (expression -> term .)
+    DECIMAL         reduce using rule 8 (expression -> term .)
+    FRASE           reduce using rule 8 (expression -> term .)
+    $end            reduce using rule 8 (expression -> term .)
+
+
+state 5
+
+    (9) term -> INTEIRO .
+
+    ADICAO          reduce using rule 9 (term -> INTEIRO .)
+    VARIAVEL        reduce using rule 9 (term -> INTEIRO .)
+    INTEIRO         reduce using rule 9 (term -> INTEIRO .)
+    DECIMAL         reduce using rule 9 (term -> INTEIRO .)
+    FRASE           reduce using rule 9 (term -> INTEIRO .)
+    $end            reduce using rule 9 (term -> INTEIRO .)
+
+
+state 6
+
+    (10) term -> DECIMAL .
+
+    ADICAO          reduce using rule 10 (term -> DECIMAL .)
+    VARIAVEL        reduce using rule 10 (term -> DECIMAL .)
+    INTEIRO         reduce using rule 10 (term -> DECIMAL .)
+    DECIMAL         reduce using rule 10 (term -> DECIMAL .)
+    FRASE           reduce using rule 10 (term -> DECIMAL .)
+    $end            reduce using rule 10 (term -> DECIMAL .)
+
+
+state 7
+
+    (11) term -> FRASE .
+
+    ADICAO          reduce using rule 11 (term -> FRASE .)
+    VARIAVEL        reduce using rule 11 (term -> FRASE .)
+    INTEIRO         reduce using rule 11 (term -> FRASE .)
+    DECIMAL         reduce using rule 11 (term -> FRASE .)
+    FRASE           reduce using rule 11 (term -> FRASE .)
+    $end            reduce using rule 11 (term -> FRASE .)
+
+
+state 8
+
+    (7) expression -> expression ADICAO . term
+    (9) term -> . INTEIRO
+    (10) term -> . DECIMAL
+    (11) term -> . FRASE
+
+    INTEIRO         shift and go to state 5
+    DECIMAL         shift and go to state 6
+    FRASE           shift and go to state 7
+
+    term                           shift and go to state 10
+
+state 9
+
+    (3) expression -> VARIAVEL IGUAL . valor FINALEXPRESSAO
+    (4) valor -> . INTEIRO
+    (5) valor -> . DECIMAL
+    (6) valor -> . FRASE
+
+    INTEIRO         shift and go to state 12
+    DECIMAL         shift and go to state 13
+    FRASE           shift and go to state 14
+
+    valor                          shift and go to state 11
+
+state 10
+
+    (7) expression -> expression ADICAO term .
+
+    ADICAO          reduce using rule 7 (expression -> expression ADICAO term .)
+    VARIAVEL        reduce using rule 7 (expression -> expression ADICAO term .)
+    INTEIRO         reduce using rule 7 (expression -> expression ADICAO term .)
+    DECIMAL         reduce using rule 7 (expression -> expression ADICAO term .)
+    FRASE           reduce using rule 7 (expression -> expression ADICAO term .)
+    $end            reduce using rule 7 (expression -> expression ADICAO term .)
+
+
+state 11
+
+    (3) expression -> VARIAVEL IGUAL valor . FINALEXPRESSAO
+
+    FINALEXPRESSAO  shift and go to state 15
+
+
+state 12
+
+    (4) valor -> INTEIRO .
+
+    FINALEXPRESSAO  reduce using rule 4 (valor -> INTEIRO .)
+
+
+state 13
+
+    (5) valor -> DECIMAL .
+
+    FINALEXPRESSAO  reduce using rule 5 (valor -> DECIMAL .)
+
+
+state 14
+
+    (6) valor -> FRASE .
+
+    FINALEXPRESSAO  reduce using rule 6 (valor -> FRASE .)
+
+
+state 15
+
+    (3) expression -> VARIAVEL IGUAL valor FINALEXPRESSAO .
+
+    ADICAO          reduce using rule 3 (expression -> VARIAVEL IGUAL valor FINALEXPRESSAO .)
+    VARIAVEL        reduce using rule 3 (expression -> VARIAVEL IGUAL valor FINALEXPRESSAO .)
+    INTEIRO         reduce using rule 3 (expression -> VARIAVEL IGUAL valor FINALEXPRESSAO .)
+    DECIMAL         reduce using rule 3 (expression -> VARIAVEL IGUAL valor FINALEXPRESSAO .)
+    FRASE           reduce using rule 3 (expression -> VARIAVEL IGUAL valor FINALEXPRESSAO .)
+    $end            reduce using rule 3 (expression -> VARIAVEL IGUAL valor FINALEXPRESSAO .)
+
