@@ -149,20 +149,40 @@ def p_expression_adicao(p):
     'expression : expression ADICAO expression'
     p[0] = p[1] + p[3]
 
+# Regra para expressões de adição de variaveis
+def p_expression_adicao_variaveis(p):
+    'expression : VARIAVEL ADICAO VARIAVEL'
+    p[0] = p[1] + p[3]
+
 # Regra para expressões de subtração
 def p_expression_subtracao(p):
     'expression : expression SUBTRACAO expression'
     p[0] = p[1] - p[3]
+
+# Regra para expressões de subtração de variaveis
+def p_expression_subtracao_variaveis(p):
+    'expression : VARIAVEL SUBTRACAO VARIAVEL'
+    p[0] = p[1] + p[3]
 
 # Regra para expressões de multiplicacao
 def p_expression_multiplicacao(p):
     'expression : expression MULTIPLICACAO expression'
     p[0] = p[1] * p[3]
 
+# Regra para expressões de multiplicacao de variaveis
+def p_expression_multiplicacao_variaveis(p):
+    'expression : VARIAVEL MULTIPLICACAO VARIAVEL'
+    p[0] = p[1] + p[3]
+
 # Regra para expressões de divisao
 def p_expression_divisao(p):
     'expression : expression DIVISAO expression'
     p[0] = p[1] / p[3]
+
+# Regra para expressões de divisao de variaveis
+def p_expression_divisao_variaveis(p):
+    'expression : VARIAVEL DIVISAO VARIAVEL'
+    p[0] = p[1] + p[3]
 
 # Regra para um termo simples
 def p_expression_term(p):
@@ -191,7 +211,7 @@ def p_parentese_expr(p):
 # Regra para o laço 'for'
 def p_for(p):
     '''expression : FOR VARIAVEL ENTRE FAIXA ESQPARENTESE INTEIRO DIRPARENTESE FINALEXPRESSAO bloco'''
-    p[0] = ('for', p[2], p[4], p[6], p[8])  # Armazena o laço: variável, valor inicial, valor final, e o bloco do corpo
+    p[0] = ('for', p[2], p[6])  # Armazena o laço: variável, valor inicial, valor final, e o bloco do corpo
 
 # Regra para o corpo do 'for', que pode ser uma ou mais expressões
 def p_bloco(p):
@@ -213,13 +233,16 @@ def p_error(p):
     if p:
         print(f"Erro de sintaxe próximo ao token: {p.value}")
     else:
-        print("Erro de sintaxe: EOF inesperado!")
+        print("Analise concluida, resultado nulo")
 
 parser = yacc.yacc()
 
 teste = '''
+a = 2;
+b = "teste";
 for i entre faixa (5);
-escreva (i);
+    escreva(a);
+
 
 '''
 
