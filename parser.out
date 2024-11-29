@@ -4,14 +4,11 @@ Unused terminals:
 
     DIFERENTE
     DIRCHAVE
-    DIRPARENTESE
-    DIVISAO
     ENQUANTO
     ENTAO
     ENTRE
     ESCREVA
     ESQCHAVE
-    ESQPARENTESE
     FAIXA
     FOR
     IGUALDADE
@@ -20,9 +17,7 @@ Unused terminals:
     MAIORIGUAL
     MENOR
     MENORIGUAL
-    MULTIPLICACAO
     SE
-    SUBTRACAO
     VIRGULA
 
 Grammar
@@ -34,50 +29,55 @@ Rule 3     expression -> VARIAVEL IGUAL valor FINALEXPRESSAO
 Rule 4     valor -> INTEIRO
 Rule 5     valor -> DECIMAL
 Rule 6     valor -> FRASE
-Rule 7     expression -> expression ADICAO term
-Rule 8     expression -> term
-Rule 9     term -> INTEIRO
-Rule 10    term -> DECIMAL
-Rule 11    term -> FRASE
+Rule 7     valor -> expression
+Rule 8     expression -> expression ADICAO expression
+Rule 9     expression -> expression SUBTRACAO expression
+Rule 10    expression -> expression MULTIPLICACAO expression
+Rule 11    expression -> expression DIVISAO expression
+Rule 12    expression -> term
+Rule 13    term -> INTEIRO
+Rule 14    term -> DECIMAL
+Rule 15    term -> FRASE
+Rule 16    term -> ESQPARENTESE expression DIRPARENTESE
 
 Terminals, with rules where they appear
 
-ADICAO               : 7
-DECIMAL              : 5 10
+ADICAO               : 8
+DECIMAL              : 5 14
 DIFERENTE            : 
 DIRCHAVE             : 
-DIRPARENTESE         : 
-DIVISAO              : 
+DIRPARENTESE         : 16
+DIVISAO              : 11
 ENQUANTO             : 
 ENTAO                : 
 ENTRE                : 
 ESCREVA              : 
 ESQCHAVE             : 
-ESQPARENTESE         : 
+ESQPARENTESE         : 16
 FAIXA                : 
 FINALEXPRESSAO       : 3
 FOR                  : 
-FRASE                : 6 11
+FRASE                : 6 15
 IGUAL                : 3
 IGUALDADE            : 
-INTEIRO              : 4 9
+INTEIRO              : 4 13
 LEIA                 : 
 MAIOR                : 
 MAIORIGUAL           : 
 MENOR                : 
 MENORIGUAL           : 
-MULTIPLICACAO        : 
+MULTIPLICACAO        : 10
 SE                   : 
-SUBTRACAO            : 
+SUBTRACAO            : 9
 VARIAVEL             : 3
 VIRGULA              : 
 error                : 
 
 Nonterminals, with rules where they appear
 
-expression           : 1 7
+expression           : 1 7 8 8 9 9 10 10 11 11 16
 programa             : 1 0
-term                 : 7 8
+term                 : 12
 valor                : 3
 
 Parsing method: LALR
@@ -92,6 +92,7 @@ state 0
     INTEIRO         reduce using rule 2 (programa -> .)
     DECIMAL         reduce using rule 2 (programa -> .)
     FRASE           reduce using rule 2 (programa -> .)
+    ESQPARENTESE    reduce using rule 2 (programa -> .)
     $end            reduce using rule 2 (programa -> .)
 
     programa                       shift and go to state 1
@@ -101,16 +102,21 @@ state 1
     (0) S' -> programa .
     (1) programa -> programa . expression
     (3) expression -> . VARIAVEL IGUAL valor FINALEXPRESSAO
-    (7) expression -> . expression ADICAO term
-    (8) expression -> . term
-    (9) term -> . INTEIRO
-    (10) term -> . DECIMAL
-    (11) term -> . FRASE
+    (8) expression -> . expression ADICAO expression
+    (9) expression -> . expression SUBTRACAO expression
+    (10) expression -> . expression MULTIPLICACAO expression
+    (11) expression -> . expression DIVISAO expression
+    (12) expression -> . term
+    (13) term -> . INTEIRO
+    (14) term -> . DECIMAL
+    (15) term -> . FRASE
+    (16) term -> . ESQPARENTESE expression DIRPARENTESE
 
     VARIAVEL        shift and go to state 3
     INTEIRO         shift and go to state 5
     DECIMAL         shift and go to state 6
     FRASE           shift and go to state 7
+    ESQPARENTESE    shift and go to state 8
 
     expression                     shift and go to state 2
     term                           shift and go to state 4
@@ -118,145 +124,476 @@ state 1
 state 2
 
     (1) programa -> programa expression .
-    (7) expression -> expression . ADICAO term
+    (8) expression -> expression . ADICAO expression
+    (9) expression -> expression . SUBTRACAO expression
+    (10) expression -> expression . MULTIPLICACAO expression
+    (11) expression -> expression . DIVISAO expression
 
     VARIAVEL        reduce using rule 1 (programa -> programa expression .)
     INTEIRO         reduce using rule 1 (programa -> programa expression .)
     DECIMAL         reduce using rule 1 (programa -> programa expression .)
     FRASE           reduce using rule 1 (programa -> programa expression .)
+    ESQPARENTESE    reduce using rule 1 (programa -> programa expression .)
     $end            reduce using rule 1 (programa -> programa expression .)
-    ADICAO          shift and go to state 8
+    ADICAO          shift and go to state 9
+    SUBTRACAO       shift and go to state 10
+    MULTIPLICACAO   shift and go to state 11
+    DIVISAO         shift and go to state 12
 
 
 state 3
 
     (3) expression -> VARIAVEL . IGUAL valor FINALEXPRESSAO
 
-    IGUAL           shift and go to state 9
+    IGUAL           shift and go to state 13
 
 
 state 4
 
-    (8) expression -> term .
+    (12) expression -> term .
 
-    ADICAO          reduce using rule 8 (expression -> term .)
-    VARIAVEL        reduce using rule 8 (expression -> term .)
-    INTEIRO         reduce using rule 8 (expression -> term .)
-    DECIMAL         reduce using rule 8 (expression -> term .)
-    FRASE           reduce using rule 8 (expression -> term .)
-    $end            reduce using rule 8 (expression -> term .)
+    ADICAO          reduce using rule 12 (expression -> term .)
+    SUBTRACAO       reduce using rule 12 (expression -> term .)
+    MULTIPLICACAO   reduce using rule 12 (expression -> term .)
+    DIVISAO         reduce using rule 12 (expression -> term .)
+    VARIAVEL        reduce using rule 12 (expression -> term .)
+    INTEIRO         reduce using rule 12 (expression -> term .)
+    DECIMAL         reduce using rule 12 (expression -> term .)
+    FRASE           reduce using rule 12 (expression -> term .)
+    ESQPARENTESE    reduce using rule 12 (expression -> term .)
+    $end            reduce using rule 12 (expression -> term .)
+    DIRPARENTESE    reduce using rule 12 (expression -> term .)
+    FINALEXPRESSAO  reduce using rule 12 (expression -> term .)
 
 
 state 5
 
-    (9) term -> INTEIRO .
+    (13) term -> INTEIRO .
 
-    ADICAO          reduce using rule 9 (term -> INTEIRO .)
-    VARIAVEL        reduce using rule 9 (term -> INTEIRO .)
-    INTEIRO         reduce using rule 9 (term -> INTEIRO .)
-    DECIMAL         reduce using rule 9 (term -> INTEIRO .)
-    FRASE           reduce using rule 9 (term -> INTEIRO .)
-    $end            reduce using rule 9 (term -> INTEIRO .)
+    ADICAO          reduce using rule 13 (term -> INTEIRO .)
+    SUBTRACAO       reduce using rule 13 (term -> INTEIRO .)
+    MULTIPLICACAO   reduce using rule 13 (term -> INTEIRO .)
+    DIVISAO         reduce using rule 13 (term -> INTEIRO .)
+    VARIAVEL        reduce using rule 13 (term -> INTEIRO .)
+    INTEIRO         reduce using rule 13 (term -> INTEIRO .)
+    DECIMAL         reduce using rule 13 (term -> INTEIRO .)
+    FRASE           reduce using rule 13 (term -> INTEIRO .)
+    ESQPARENTESE    reduce using rule 13 (term -> INTEIRO .)
+    $end            reduce using rule 13 (term -> INTEIRO .)
+    DIRPARENTESE    reduce using rule 13 (term -> INTEIRO .)
+    FINALEXPRESSAO  reduce using rule 13 (term -> INTEIRO .)
 
 
 state 6
 
-    (10) term -> DECIMAL .
+    (14) term -> DECIMAL .
 
-    ADICAO          reduce using rule 10 (term -> DECIMAL .)
-    VARIAVEL        reduce using rule 10 (term -> DECIMAL .)
-    INTEIRO         reduce using rule 10 (term -> DECIMAL .)
-    DECIMAL         reduce using rule 10 (term -> DECIMAL .)
-    FRASE           reduce using rule 10 (term -> DECIMAL .)
-    $end            reduce using rule 10 (term -> DECIMAL .)
+    ADICAO          reduce using rule 14 (term -> DECIMAL .)
+    SUBTRACAO       reduce using rule 14 (term -> DECIMAL .)
+    MULTIPLICACAO   reduce using rule 14 (term -> DECIMAL .)
+    DIVISAO         reduce using rule 14 (term -> DECIMAL .)
+    VARIAVEL        reduce using rule 14 (term -> DECIMAL .)
+    INTEIRO         reduce using rule 14 (term -> DECIMAL .)
+    DECIMAL         reduce using rule 14 (term -> DECIMAL .)
+    FRASE           reduce using rule 14 (term -> DECIMAL .)
+    ESQPARENTESE    reduce using rule 14 (term -> DECIMAL .)
+    $end            reduce using rule 14 (term -> DECIMAL .)
+    DIRPARENTESE    reduce using rule 14 (term -> DECIMAL .)
+    FINALEXPRESSAO  reduce using rule 14 (term -> DECIMAL .)
 
 
 state 7
 
-    (11) term -> FRASE .
+    (15) term -> FRASE .
 
-    ADICAO          reduce using rule 11 (term -> FRASE .)
-    VARIAVEL        reduce using rule 11 (term -> FRASE .)
-    INTEIRO         reduce using rule 11 (term -> FRASE .)
-    DECIMAL         reduce using rule 11 (term -> FRASE .)
-    FRASE           reduce using rule 11 (term -> FRASE .)
-    $end            reduce using rule 11 (term -> FRASE .)
+    ADICAO          reduce using rule 15 (term -> FRASE .)
+    SUBTRACAO       reduce using rule 15 (term -> FRASE .)
+    MULTIPLICACAO   reduce using rule 15 (term -> FRASE .)
+    DIVISAO         reduce using rule 15 (term -> FRASE .)
+    VARIAVEL        reduce using rule 15 (term -> FRASE .)
+    INTEIRO         reduce using rule 15 (term -> FRASE .)
+    DECIMAL         reduce using rule 15 (term -> FRASE .)
+    FRASE           reduce using rule 15 (term -> FRASE .)
+    ESQPARENTESE    reduce using rule 15 (term -> FRASE .)
+    $end            reduce using rule 15 (term -> FRASE .)
+    DIRPARENTESE    reduce using rule 15 (term -> FRASE .)
+    FINALEXPRESSAO  reduce using rule 15 (term -> FRASE .)
 
 
 state 8
 
-    (7) expression -> expression ADICAO . term
-    (9) term -> . INTEIRO
-    (10) term -> . DECIMAL
-    (11) term -> . FRASE
+    (16) term -> ESQPARENTESE . expression DIRPARENTESE
+    (3) expression -> . VARIAVEL IGUAL valor FINALEXPRESSAO
+    (8) expression -> . expression ADICAO expression
+    (9) expression -> . expression SUBTRACAO expression
+    (10) expression -> . expression MULTIPLICACAO expression
+    (11) expression -> . expression DIVISAO expression
+    (12) expression -> . term
+    (13) term -> . INTEIRO
+    (14) term -> . DECIMAL
+    (15) term -> . FRASE
+    (16) term -> . ESQPARENTESE expression DIRPARENTESE
 
+    VARIAVEL        shift and go to state 3
     INTEIRO         shift and go to state 5
     DECIMAL         shift and go to state 6
     FRASE           shift and go to state 7
+    ESQPARENTESE    shift and go to state 8
 
-    term                           shift and go to state 10
+    expression                     shift and go to state 14
+    term                           shift and go to state 4
 
 state 9
+
+    (8) expression -> expression ADICAO . expression
+    (3) expression -> . VARIAVEL IGUAL valor FINALEXPRESSAO
+    (8) expression -> . expression ADICAO expression
+    (9) expression -> . expression SUBTRACAO expression
+    (10) expression -> . expression MULTIPLICACAO expression
+    (11) expression -> . expression DIVISAO expression
+    (12) expression -> . term
+    (13) term -> . INTEIRO
+    (14) term -> . DECIMAL
+    (15) term -> . FRASE
+    (16) term -> . ESQPARENTESE expression DIRPARENTESE
+
+    VARIAVEL        shift and go to state 3
+    INTEIRO         shift and go to state 5
+    DECIMAL         shift and go to state 6
+    FRASE           shift and go to state 7
+    ESQPARENTESE    shift and go to state 8
+
+    expression                     shift and go to state 15
+    term                           shift and go to state 4
+
+state 10
+
+    (9) expression -> expression SUBTRACAO . expression
+    (3) expression -> . VARIAVEL IGUAL valor FINALEXPRESSAO
+    (8) expression -> . expression ADICAO expression
+    (9) expression -> . expression SUBTRACAO expression
+    (10) expression -> . expression MULTIPLICACAO expression
+    (11) expression -> . expression DIVISAO expression
+    (12) expression -> . term
+    (13) term -> . INTEIRO
+    (14) term -> . DECIMAL
+    (15) term -> . FRASE
+    (16) term -> . ESQPARENTESE expression DIRPARENTESE
+
+    VARIAVEL        shift and go to state 3
+    INTEIRO         shift and go to state 5
+    DECIMAL         shift and go to state 6
+    FRASE           shift and go to state 7
+    ESQPARENTESE    shift and go to state 8
+
+    expression                     shift and go to state 16
+    term                           shift and go to state 4
+
+state 11
+
+    (10) expression -> expression MULTIPLICACAO . expression
+    (3) expression -> . VARIAVEL IGUAL valor FINALEXPRESSAO
+    (8) expression -> . expression ADICAO expression
+    (9) expression -> . expression SUBTRACAO expression
+    (10) expression -> . expression MULTIPLICACAO expression
+    (11) expression -> . expression DIVISAO expression
+    (12) expression -> . term
+    (13) term -> . INTEIRO
+    (14) term -> . DECIMAL
+    (15) term -> . FRASE
+    (16) term -> . ESQPARENTESE expression DIRPARENTESE
+
+    VARIAVEL        shift and go to state 3
+    INTEIRO         shift and go to state 5
+    DECIMAL         shift and go to state 6
+    FRASE           shift and go to state 7
+    ESQPARENTESE    shift and go to state 8
+
+    expression                     shift and go to state 17
+    term                           shift and go to state 4
+
+state 12
+
+    (11) expression -> expression DIVISAO . expression
+    (3) expression -> . VARIAVEL IGUAL valor FINALEXPRESSAO
+    (8) expression -> . expression ADICAO expression
+    (9) expression -> . expression SUBTRACAO expression
+    (10) expression -> . expression MULTIPLICACAO expression
+    (11) expression -> . expression DIVISAO expression
+    (12) expression -> . term
+    (13) term -> . INTEIRO
+    (14) term -> . DECIMAL
+    (15) term -> . FRASE
+    (16) term -> . ESQPARENTESE expression DIRPARENTESE
+
+    VARIAVEL        shift and go to state 3
+    INTEIRO         shift and go to state 5
+    DECIMAL         shift and go to state 6
+    FRASE           shift and go to state 7
+    ESQPARENTESE    shift and go to state 8
+
+    expression                     shift and go to state 18
+    term                           shift and go to state 4
+
+state 13
 
     (3) expression -> VARIAVEL IGUAL . valor FINALEXPRESSAO
     (4) valor -> . INTEIRO
     (5) valor -> . DECIMAL
     (6) valor -> . FRASE
+    (7) valor -> . expression
+    (3) expression -> . VARIAVEL IGUAL valor FINALEXPRESSAO
+    (8) expression -> . expression ADICAO expression
+    (9) expression -> . expression SUBTRACAO expression
+    (10) expression -> . expression MULTIPLICACAO expression
+    (11) expression -> . expression DIVISAO expression
+    (12) expression -> . term
+    (13) term -> . INTEIRO
+    (14) term -> . DECIMAL
+    (15) term -> . FRASE
+    (16) term -> . ESQPARENTESE expression DIRPARENTESE
 
-    INTEIRO         shift and go to state 12
-    DECIMAL         shift and go to state 13
-    FRASE           shift and go to state 14
+    INTEIRO         shift and go to state 20
+    DECIMAL         shift and go to state 21
+    FRASE           shift and go to state 22
+    VARIAVEL        shift and go to state 3
+    ESQPARENTESE    shift and go to state 8
 
-    valor                          shift and go to state 11
-
-state 10
-
-    (7) expression -> expression ADICAO term .
-
-    ADICAO          reduce using rule 7 (expression -> expression ADICAO term .)
-    VARIAVEL        reduce using rule 7 (expression -> expression ADICAO term .)
-    INTEIRO         reduce using rule 7 (expression -> expression ADICAO term .)
-    DECIMAL         reduce using rule 7 (expression -> expression ADICAO term .)
-    FRASE           reduce using rule 7 (expression -> expression ADICAO term .)
-    $end            reduce using rule 7 (expression -> expression ADICAO term .)
-
-
-state 11
-
-    (3) expression -> VARIAVEL IGUAL valor . FINALEXPRESSAO
-
-    FINALEXPRESSAO  shift and go to state 15
-
-
-state 12
-
-    (4) valor -> INTEIRO .
-
-    FINALEXPRESSAO  reduce using rule 4 (valor -> INTEIRO .)
-
-
-state 13
-
-    (5) valor -> DECIMAL .
-
-    FINALEXPRESSAO  reduce using rule 5 (valor -> DECIMAL .)
-
+    valor                          shift and go to state 19
+    expression                     shift and go to state 23
+    term                           shift and go to state 4
 
 state 14
 
-    (6) valor -> FRASE .
+    (16) term -> ESQPARENTESE expression . DIRPARENTESE
+    (8) expression -> expression . ADICAO expression
+    (9) expression -> expression . SUBTRACAO expression
+    (10) expression -> expression . MULTIPLICACAO expression
+    (11) expression -> expression . DIVISAO expression
 
-    FINALEXPRESSAO  reduce using rule 6 (valor -> FRASE .)
+    DIRPARENTESE    shift and go to state 24
+    ADICAO          shift and go to state 9
+    SUBTRACAO       shift and go to state 10
+    MULTIPLICACAO   shift and go to state 11
+    DIVISAO         shift and go to state 12
 
 
 state 15
 
+    (8) expression -> expression ADICAO expression .
+    (8) expression -> expression . ADICAO expression
+    (9) expression -> expression . SUBTRACAO expression
+    (10) expression -> expression . MULTIPLICACAO expression
+    (11) expression -> expression . DIVISAO expression
+
+    ADICAO          reduce using rule 8 (expression -> expression ADICAO expression .)
+    SUBTRACAO       reduce using rule 8 (expression -> expression ADICAO expression .)
+    VARIAVEL        reduce using rule 8 (expression -> expression ADICAO expression .)
+    INTEIRO         reduce using rule 8 (expression -> expression ADICAO expression .)
+    DECIMAL         reduce using rule 8 (expression -> expression ADICAO expression .)
+    FRASE           reduce using rule 8 (expression -> expression ADICAO expression .)
+    ESQPARENTESE    reduce using rule 8 (expression -> expression ADICAO expression .)
+    $end            reduce using rule 8 (expression -> expression ADICAO expression .)
+    DIRPARENTESE    reduce using rule 8 (expression -> expression ADICAO expression .)
+    FINALEXPRESSAO  reduce using rule 8 (expression -> expression ADICAO expression .)
+    MULTIPLICACAO   shift and go to state 11
+    DIVISAO         shift and go to state 12
+
+  ! MULTIPLICACAO   [ reduce using rule 8 (expression -> expression ADICAO expression .) ]
+  ! DIVISAO         [ reduce using rule 8 (expression -> expression ADICAO expression .) ]
+  ! ADICAO          [ shift and go to state 9 ]
+  ! SUBTRACAO       [ shift and go to state 10 ]
+
+
+state 16
+
+    (9) expression -> expression SUBTRACAO expression .
+    (8) expression -> expression . ADICAO expression
+    (9) expression -> expression . SUBTRACAO expression
+    (10) expression -> expression . MULTIPLICACAO expression
+    (11) expression -> expression . DIVISAO expression
+
+    ADICAO          reduce using rule 9 (expression -> expression SUBTRACAO expression .)
+    SUBTRACAO       reduce using rule 9 (expression -> expression SUBTRACAO expression .)
+    VARIAVEL        reduce using rule 9 (expression -> expression SUBTRACAO expression .)
+    INTEIRO         reduce using rule 9 (expression -> expression SUBTRACAO expression .)
+    DECIMAL         reduce using rule 9 (expression -> expression SUBTRACAO expression .)
+    FRASE           reduce using rule 9 (expression -> expression SUBTRACAO expression .)
+    ESQPARENTESE    reduce using rule 9 (expression -> expression SUBTRACAO expression .)
+    $end            reduce using rule 9 (expression -> expression SUBTRACAO expression .)
+    DIRPARENTESE    reduce using rule 9 (expression -> expression SUBTRACAO expression .)
+    FINALEXPRESSAO  reduce using rule 9 (expression -> expression SUBTRACAO expression .)
+    MULTIPLICACAO   shift and go to state 11
+    DIVISAO         shift and go to state 12
+
+  ! MULTIPLICACAO   [ reduce using rule 9 (expression -> expression SUBTRACAO expression .) ]
+  ! DIVISAO         [ reduce using rule 9 (expression -> expression SUBTRACAO expression .) ]
+  ! ADICAO          [ shift and go to state 9 ]
+  ! SUBTRACAO       [ shift and go to state 10 ]
+
+
+state 17
+
+    (10) expression -> expression MULTIPLICACAO expression .
+    (8) expression -> expression . ADICAO expression
+    (9) expression -> expression . SUBTRACAO expression
+    (10) expression -> expression . MULTIPLICACAO expression
+    (11) expression -> expression . DIVISAO expression
+
+    ADICAO          reduce using rule 10 (expression -> expression MULTIPLICACAO expression .)
+    SUBTRACAO       reduce using rule 10 (expression -> expression MULTIPLICACAO expression .)
+    MULTIPLICACAO   reduce using rule 10 (expression -> expression MULTIPLICACAO expression .)
+    DIVISAO         reduce using rule 10 (expression -> expression MULTIPLICACAO expression .)
+    VARIAVEL        reduce using rule 10 (expression -> expression MULTIPLICACAO expression .)
+    INTEIRO         reduce using rule 10 (expression -> expression MULTIPLICACAO expression .)
+    DECIMAL         reduce using rule 10 (expression -> expression MULTIPLICACAO expression .)
+    FRASE           reduce using rule 10 (expression -> expression MULTIPLICACAO expression .)
+    ESQPARENTESE    reduce using rule 10 (expression -> expression MULTIPLICACAO expression .)
+    $end            reduce using rule 10 (expression -> expression MULTIPLICACAO expression .)
+    DIRPARENTESE    reduce using rule 10 (expression -> expression MULTIPLICACAO expression .)
+    FINALEXPRESSAO  reduce using rule 10 (expression -> expression MULTIPLICACAO expression .)
+
+  ! ADICAO          [ shift and go to state 9 ]
+  ! SUBTRACAO       [ shift and go to state 10 ]
+  ! MULTIPLICACAO   [ shift and go to state 11 ]
+  ! DIVISAO         [ shift and go to state 12 ]
+
+
+state 18
+
+    (11) expression -> expression DIVISAO expression .
+    (8) expression -> expression . ADICAO expression
+    (9) expression -> expression . SUBTRACAO expression
+    (10) expression -> expression . MULTIPLICACAO expression
+    (11) expression -> expression . DIVISAO expression
+
+    ADICAO          reduce using rule 11 (expression -> expression DIVISAO expression .)
+    SUBTRACAO       reduce using rule 11 (expression -> expression DIVISAO expression .)
+    MULTIPLICACAO   reduce using rule 11 (expression -> expression DIVISAO expression .)
+    DIVISAO         reduce using rule 11 (expression -> expression DIVISAO expression .)
+    VARIAVEL        reduce using rule 11 (expression -> expression DIVISAO expression .)
+    INTEIRO         reduce using rule 11 (expression -> expression DIVISAO expression .)
+    DECIMAL         reduce using rule 11 (expression -> expression DIVISAO expression .)
+    FRASE           reduce using rule 11 (expression -> expression DIVISAO expression .)
+    ESQPARENTESE    reduce using rule 11 (expression -> expression DIVISAO expression .)
+    $end            reduce using rule 11 (expression -> expression DIVISAO expression .)
+    DIRPARENTESE    reduce using rule 11 (expression -> expression DIVISAO expression .)
+    FINALEXPRESSAO  reduce using rule 11 (expression -> expression DIVISAO expression .)
+
+  ! ADICAO          [ shift and go to state 9 ]
+  ! SUBTRACAO       [ shift and go to state 10 ]
+  ! MULTIPLICACAO   [ shift and go to state 11 ]
+  ! DIVISAO         [ shift and go to state 12 ]
+
+
+state 19
+
+    (3) expression -> VARIAVEL IGUAL valor . FINALEXPRESSAO
+
+    FINALEXPRESSAO  shift and go to state 25
+
+
+state 20
+
+    (4) valor -> INTEIRO .
+    (13) term -> INTEIRO .
+
+  ! reduce/reduce conflict for FINALEXPRESSAO resolved using rule 4 (valor -> INTEIRO .)
+    FINALEXPRESSAO  reduce using rule 4 (valor -> INTEIRO .)
+    ADICAO          reduce using rule 13 (term -> INTEIRO .)
+    SUBTRACAO       reduce using rule 13 (term -> INTEIRO .)
+    MULTIPLICACAO   reduce using rule 13 (term -> INTEIRO .)
+    DIVISAO         reduce using rule 13 (term -> INTEIRO .)
+
+  ! FINALEXPRESSAO  [ reduce using rule 13 (term -> INTEIRO .) ]
+
+
+state 21
+
+    (5) valor -> DECIMAL .
+    (14) term -> DECIMAL .
+
+  ! reduce/reduce conflict for FINALEXPRESSAO resolved using rule 5 (valor -> DECIMAL .)
+    FINALEXPRESSAO  reduce using rule 5 (valor -> DECIMAL .)
+    ADICAO          reduce using rule 14 (term -> DECIMAL .)
+    SUBTRACAO       reduce using rule 14 (term -> DECIMAL .)
+    MULTIPLICACAO   reduce using rule 14 (term -> DECIMAL .)
+    DIVISAO         reduce using rule 14 (term -> DECIMAL .)
+
+  ! FINALEXPRESSAO  [ reduce using rule 14 (term -> DECIMAL .) ]
+
+
+state 22
+
+    (6) valor -> FRASE .
+    (15) term -> FRASE .
+
+  ! reduce/reduce conflict for FINALEXPRESSAO resolved using rule 6 (valor -> FRASE .)
+    FINALEXPRESSAO  reduce using rule 6 (valor -> FRASE .)
+    ADICAO          reduce using rule 15 (term -> FRASE .)
+    SUBTRACAO       reduce using rule 15 (term -> FRASE .)
+    MULTIPLICACAO   reduce using rule 15 (term -> FRASE .)
+    DIVISAO         reduce using rule 15 (term -> FRASE .)
+
+  ! FINALEXPRESSAO  [ reduce using rule 15 (term -> FRASE .) ]
+
+
+state 23
+
+    (7) valor -> expression .
+    (8) expression -> expression . ADICAO expression
+    (9) expression -> expression . SUBTRACAO expression
+    (10) expression -> expression . MULTIPLICACAO expression
+    (11) expression -> expression . DIVISAO expression
+
+    FINALEXPRESSAO  reduce using rule 7 (valor -> expression .)
+    ADICAO          shift and go to state 9
+    SUBTRACAO       shift and go to state 10
+    MULTIPLICACAO   shift and go to state 11
+    DIVISAO         shift and go to state 12
+
+
+state 24
+
+    (16) term -> ESQPARENTESE expression DIRPARENTESE .
+
+    ADICAO          reduce using rule 16 (term -> ESQPARENTESE expression DIRPARENTESE .)
+    SUBTRACAO       reduce using rule 16 (term -> ESQPARENTESE expression DIRPARENTESE .)
+    MULTIPLICACAO   reduce using rule 16 (term -> ESQPARENTESE expression DIRPARENTESE .)
+    DIVISAO         reduce using rule 16 (term -> ESQPARENTESE expression DIRPARENTESE .)
+    VARIAVEL        reduce using rule 16 (term -> ESQPARENTESE expression DIRPARENTESE .)
+    INTEIRO         reduce using rule 16 (term -> ESQPARENTESE expression DIRPARENTESE .)
+    DECIMAL         reduce using rule 16 (term -> ESQPARENTESE expression DIRPARENTESE .)
+    FRASE           reduce using rule 16 (term -> ESQPARENTESE expression DIRPARENTESE .)
+    ESQPARENTESE    reduce using rule 16 (term -> ESQPARENTESE expression DIRPARENTESE .)
+    $end            reduce using rule 16 (term -> ESQPARENTESE expression DIRPARENTESE .)
+    DIRPARENTESE    reduce using rule 16 (term -> ESQPARENTESE expression DIRPARENTESE .)
+    FINALEXPRESSAO  reduce using rule 16 (term -> ESQPARENTESE expression DIRPARENTESE .)
+
+
+state 25
+
     (3) expression -> VARIAVEL IGUAL valor FINALEXPRESSAO .
 
     ADICAO          reduce using rule 3 (expression -> VARIAVEL IGUAL valor FINALEXPRESSAO .)
+    SUBTRACAO       reduce using rule 3 (expression -> VARIAVEL IGUAL valor FINALEXPRESSAO .)
+    MULTIPLICACAO   reduce using rule 3 (expression -> VARIAVEL IGUAL valor FINALEXPRESSAO .)
+    DIVISAO         reduce using rule 3 (expression -> VARIAVEL IGUAL valor FINALEXPRESSAO .)
     VARIAVEL        reduce using rule 3 (expression -> VARIAVEL IGUAL valor FINALEXPRESSAO .)
     INTEIRO         reduce using rule 3 (expression -> VARIAVEL IGUAL valor FINALEXPRESSAO .)
     DECIMAL         reduce using rule 3 (expression -> VARIAVEL IGUAL valor FINALEXPRESSAO .)
     FRASE           reduce using rule 3 (expression -> VARIAVEL IGUAL valor FINALEXPRESSAO .)
+    ESQPARENTESE    reduce using rule 3 (expression -> VARIAVEL IGUAL valor FINALEXPRESSAO .)
     $end            reduce using rule 3 (expression -> VARIAVEL IGUAL valor FINALEXPRESSAO .)
+    DIRPARENTESE    reduce using rule 3 (expression -> VARIAVEL IGUAL valor FINALEXPRESSAO .)
+    FINALEXPRESSAO  reduce using rule 3 (expression -> VARIAVEL IGUAL valor FINALEXPRESSAO .)
 
+WARNING: 
+WARNING: Conflicts:
+WARNING: 
+WARNING: reduce/reduce conflict in state 20 resolved using rule (valor -> INTEIRO)
+WARNING: rejected rule (term -> INTEIRO) in state 20
+WARNING: reduce/reduce conflict in state 21 resolved using rule (valor -> DECIMAL)
+WARNING: rejected rule (term -> DECIMAL) in state 21
+WARNING: reduce/reduce conflict in state 22 resolved using rule (valor -> FRASE)
+WARNING: rejected rule (term -> FRASE) in state 22

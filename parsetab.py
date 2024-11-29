@@ -6,9 +6,9 @@ _tabversion = '3.10'
 
 _lr_method = 'LALR'
 
-_lr_signature = 'ADICAO DECIMAL DIFERENTE DIRCHAVE DIRPARENTESE DIVISAO ENQUANTO ENTAO ENTRE ESCREVA ESQCHAVE ESQPARENTESE FAIXA FINALEXPRESSAO FOR FRASE IGUAL IGUALDADE INTEIRO LEIA MAIOR MAIORIGUAL MENOR MENORIGUAL MULTIPLICACAO SE SUBTRACAO VARIAVEL VIRGULAprograma : programa expressionprograma : expression : VARIAVEL IGUAL valor FINALEXPRESSAOvalor : INTEIRO\n             | DECIMAL\n             | FRASEexpression : expression ADICAO termexpression : termterm : INTEIROterm : DECIMALterm : FRASE'
+_lr_signature = 'leftADICAOSUBTRACAOleftMULTIPLICACAODIVISAOADICAO DECIMAL DIFERENTE DIRCHAVE DIRPARENTESE DIVISAO ENQUANTO ENTAO ENTRE ESCREVA ESQCHAVE ESQPARENTESE FAIXA FINALEXPRESSAO FOR FRASE IGUAL IGUALDADE INTEIRO LEIA MAIOR MAIORIGUAL MENOR MENORIGUAL MULTIPLICACAO SE SUBTRACAO VARIAVEL VIRGULAprograma : programa expressionprograma : expression : VARIAVEL IGUAL valor FINALEXPRESSAOvalor : INTEIRO\n             | DECIMAL\n             | FRASE\n             | expressionexpression : expression ADICAO expressionexpression : expression SUBTRACAO expressionexpression : expression MULTIPLICACAO expressionexpression : expression DIVISAO expressionexpression : termterm : INTEIROterm : DECIMALterm : FRASEterm : ESQPARENTESE expression DIRPARENTESE'
     
-_lr_action_items = {'VARIAVEL':([0,1,2,4,5,6,7,10,15,],[-2,3,-1,-8,-9,-10,-11,-7,-3,]),'INTEIRO':([0,1,2,4,5,6,7,8,9,10,15,],[-2,5,-1,-8,-9,-10,-11,5,12,-7,-3,]),'DECIMAL':([0,1,2,4,5,6,7,8,9,10,15,],[-2,6,-1,-8,-9,-10,-11,6,13,-7,-3,]),'FRASE':([0,1,2,4,5,6,7,8,9,10,15,],[-2,7,-1,-8,-9,-10,-11,7,14,-7,-3,]),'$end':([0,1,2,4,5,6,7,10,15,],[-2,0,-1,-8,-9,-10,-11,-7,-3,]),'ADICAO':([2,4,5,6,7,10,15,],[8,-8,-9,-10,-11,-7,-3,]),'IGUAL':([3,],[9,]),'FINALEXPRESSAO':([11,12,13,14,],[15,-4,-5,-6,]),}
+_lr_action_items = {'VARIAVEL':([0,1,2,4,5,6,7,8,9,10,11,12,13,15,16,17,18,24,25,],[-2,3,-1,-12,-13,-14,-15,3,3,3,3,3,3,-8,-9,-10,-11,-16,-3,]),'INTEIRO':([0,1,2,4,5,6,7,8,9,10,11,12,13,15,16,17,18,24,25,],[-2,5,-1,-12,-13,-14,-15,5,5,5,5,5,20,-8,-9,-10,-11,-16,-3,]),'DECIMAL':([0,1,2,4,5,6,7,8,9,10,11,12,13,15,16,17,18,24,25,],[-2,6,-1,-12,-13,-14,-15,6,6,6,6,6,21,-8,-9,-10,-11,-16,-3,]),'FRASE':([0,1,2,4,5,6,7,8,9,10,11,12,13,15,16,17,18,24,25,],[-2,7,-1,-12,-13,-14,-15,7,7,7,7,7,22,-8,-9,-10,-11,-16,-3,]),'ESQPARENTESE':([0,1,2,4,5,6,7,8,9,10,11,12,13,15,16,17,18,24,25,],[-2,8,-1,-12,-13,-14,-15,8,8,8,8,8,8,-8,-9,-10,-11,-16,-3,]),'$end':([0,1,2,4,5,6,7,15,16,17,18,24,25,],[-2,0,-1,-12,-13,-14,-15,-8,-9,-10,-11,-16,-3,]),'ADICAO':([2,4,5,6,7,14,15,16,17,18,20,21,22,23,24,25,],[9,-12,-13,-14,-15,9,-8,-9,-10,-11,-13,-14,-15,9,-16,-3,]),'SUBTRACAO':([2,4,5,6,7,14,15,16,17,18,20,21,22,23,24,25,],[10,-12,-13,-14,-15,10,-8,-9,-10,-11,-13,-14,-15,10,-16,-3,]),'MULTIPLICACAO':([2,4,5,6,7,14,15,16,17,18,20,21,22,23,24,25,],[11,-12,-13,-14,-15,11,11,11,-10,-11,-13,-14,-15,11,-16,-3,]),'DIVISAO':([2,4,5,6,7,14,15,16,17,18,20,21,22,23,24,25,],[12,-12,-13,-14,-15,12,12,12,-10,-11,-13,-14,-15,12,-16,-3,]),'IGUAL':([3,],[13,]),'DIRPARENTESE':([4,5,6,7,14,15,16,17,18,24,25,],[-12,-13,-14,-15,24,-8,-9,-10,-11,-16,-3,]),'FINALEXPRESSAO':([4,5,6,7,15,16,17,18,19,20,21,22,23,24,25,],[-12,-13,-14,-15,-8,-9,-10,-11,25,-4,-5,-6,-7,-16,-3,]),}
 
 _lr_action = {}
 for _k, _v in _lr_action_items.items():
@@ -17,7 +17,7 @@ for _k, _v in _lr_action_items.items():
       _lr_action[_x][_k] = _y
 del _lr_action_items
 
-_lr_goto_items = {'programa':([0,],[1,]),'expression':([1,],[2,]),'term':([1,8,],[4,10,]),'valor':([9,],[11,]),}
+_lr_goto_items = {'programa':([0,],[1,]),'expression':([1,8,9,10,11,12,13,],[2,14,15,16,17,18,23,]),'term':([1,8,9,10,11,12,13,],[4,4,4,4,4,4,4,]),'valor':([13,],[19,]),}
 
 _lr_goto = {}
 for _k, _v in _lr_goto_items.items():
@@ -27,15 +27,20 @@ for _k, _v in _lr_goto_items.items():
 del _lr_goto_items
 _lr_productions = [
   ("S' -> programa","S'",1,None,None,None),
-  ('programa -> programa expression','programa',2,'p_programa','lex.py',120),
-  ('programa -> <empty>','programa',0,'p_programa_vazio','lex.py',124),
-  ('expression -> VARIAVEL IGUAL valor FINALEXPRESSAO','expression',4,'p_declaracao_variavel','lex.py',129),
-  ('valor -> INTEIRO','valor',1,'p_valor','lex.py',134),
-  ('valor -> DECIMAL','valor',1,'p_valor','lex.py',135),
-  ('valor -> FRASE','valor',1,'p_valor','lex.py',136),
-  ('expression -> expression ADICAO term','expression',3,'p_expression_adicao','lex.py',141),
-  ('expression -> term','expression',1,'p_expression_term','lex.py',146),
-  ('term -> INTEIRO','term',1,'p_term_number','lex.py',151),
-  ('term -> DECIMAL','term',1,'p_term_decimal','lex.py',156),
-  ('term -> FRASE','term',1,'p_term_string','lex.py',161),
+  ('programa -> programa expression','programa',2,'p_programa','lex.py',126),
+  ('programa -> <empty>','programa',0,'p_programa_vazio','lex.py',130),
+  ('expression -> VARIAVEL IGUAL valor FINALEXPRESSAO','expression',4,'p_declaracao_variavel','lex.py',135),
+  ('valor -> INTEIRO','valor',1,'p_valor','lex.py',141),
+  ('valor -> DECIMAL','valor',1,'p_valor','lex.py',142),
+  ('valor -> FRASE','valor',1,'p_valor','lex.py',143),
+  ('valor -> expression','valor',1,'p_valor','lex.py',144),
+  ('expression -> expression ADICAO expression','expression',3,'p_expression_adicao','lex.py',149),
+  ('expression -> expression SUBTRACAO expression','expression',3,'p_expression_subtracao','lex.py',154),
+  ('expression -> expression MULTIPLICACAO expression','expression',3,'p_expression_multiplicacao','lex.py',159),
+  ('expression -> expression DIVISAO expression','expression',3,'p_expression_divisao','lex.py',164),
+  ('expression -> term','expression',1,'p_expression_term','lex.py',169),
+  ('term -> INTEIRO','term',1,'p_term_number','lex.py',174),
+  ('term -> DECIMAL','term',1,'p_term_decimal','lex.py',179),
+  ('term -> FRASE','term',1,'p_term_string','lex.py',184),
+  ('term -> ESQPARENTESE expression DIRPARENTESE','term',3,'p_parentese_expr','lex.py',188),
 ]

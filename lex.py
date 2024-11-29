@@ -115,6 +115,12 @@ def t_error(t):
 lexer = lex.lex()
 
 #---------Análise Sintática e Semântica-------------------------------------
+
+precedence = (
+    ('left', 'ADICAO', 'SUBTRACAO'),
+    ('left', 'MULTIPLICACAO', 'DIVISAO'),
+)
+
 # Regra para declarar e atribuir variáveis (com múltiplas declarações)
 def p_programa(p):
     'programa : programa expression'
@@ -129,17 +135,34 @@ def p_declaracao_variavel(p):
     'expression : VARIAVEL IGUAL valor FINALEXPRESSAO'
     p[0] = (p[1], p[3])  # Armazena o nome da variável e seu valor
 
+
 # Regra para os valores possíveis (inteiro, decimal, ou string)
 def p_valor(p):
     '''valor : INTEIRO
              | DECIMAL
-             | FRASE'''
+             | FRASE
+             | expression'''
     p[0] = p[1]  # O valor da variável será o valor do tipo correspondente
 
 # Regra para expressões de adição
 def p_expression_adicao(p):
-    'expression : expression ADICAO term'
+    'expression : expression ADICAO expression'
     p[0] = p[1] + p[3]
+
+# Regra para expressões de subtração
+def p_expression_subtracao(p):
+    'expression : expression SUBTRACAO expression'
+    p[0] = p[1] - p[3]
+
+# Regra para expressões de multiplicacao
+def p_expression_multiplicacao(p):
+    'expression : expression MULTIPLICACAO expression'
+    p[0] = p[1] * p[3]
+
+# Regra para expressões de divisao
+def p_expression_divisao(p):
+    'expression : expression DIVISAO expression'
+    p[0] = p[1] / p[3]
 
 # Regra para um termo simples
 def p_expression_term(p):
@@ -161,6 +184,10 @@ def p_term_string(p):
     'term : FRASE'
     p[0] = p[1]
 
+def p_parentese_expr(p):
+    'term : ESQPARENTESE expression DIRPARENTESE'
+    p[0] = p[2]
+
 def p_error(p):
     if p:
         print(f"Erro de sintaxe próximo ao token: {p.value}")
@@ -171,8 +198,8 @@ parser = yacc.yacc()
 
 teste = '''
 a = 2;
-teste = "teste";
-b = 3;
+b = "teste";
+c = (2 + 2) * (3 + 3);
 
 '''
 
