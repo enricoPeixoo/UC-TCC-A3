@@ -219,6 +219,17 @@ def p_bloco(p):
              | bloco expression'''
     p[0] = p[1:]  # Armazena o corpo do bloco com suas expressõe
 
+def p_enquanto(p):
+    '''expression : ENQUANTO VARIAVEL MENOR INTEIRO FINALEXPRESSAO bloco
+                  | ENQUANTO VARIAVEL MAIOR INTEIRO FINALEXPRESSAO bloco
+                  | ENQUANTO VARIAVEL IGUAL INTEIRO FINALEXPRESSAO bloco
+                  | ENQUANTO VARIAVEL IGUALDADE INTEIRO FINALEXPRESSAO bloco
+                  | ENQUANTO VARIAVEL DIFERENTE INTEIRO FINALEXPRESSAO bloco
+                  | ENQUANTO VARIAVEL MENORIGUAL INTEIRO FINALEXPRESSAO bloco
+                  | ENQUANTO VARIAVEL MAIORIGUAL INTEIRO FINALEXPRESSAO bloco'''
+    p[0] = ('while', p[2], p[4])  # Armazena a condição e o bloco do laço
+
+
 # Regra para o comando 'escreva'
 def p_escreva_expressao(p):
     'expression : ESCREVA ESQPARENTESE expression DIRPARENTESE FINALEXPRESSAO'
@@ -238,11 +249,8 @@ def p_error(p):
 parser = yacc.yacc()
 
 teste = '''
-a = 2;
-b = "teste";
-for i entre faixa (5);
-    escreva(a);
-
+enquanto i >= 5;
+escreva(i);
 
 '''
 
