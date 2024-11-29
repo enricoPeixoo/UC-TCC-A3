@@ -140,6 +140,15 @@ def p_declaracao_variavel(p):
     'expression : VARIAVEL IGUAL valor FINALEXPRESSAO'
     p[0] = (p[1], p[3])  # Armazena o nome da variável e seu valor
 
+def p_declaracao_variavel_expressao(p):
+    'expression : VARIAVEL IGUAL expression FINALEXPRESSAO'
+    p[0] = (p[1], p[3])  # Armazena o nome da variável e seu valor
+
+# Regra para declaração e atribuição de variáveis
+def p_declaracao_variavel_leia(p):
+    'expression : VARIAVEL IGUAL LEIA ESQPARENTESE DIRPARENTESE FINALEXPRESSAO'
+    p[0] = (p[1], p[3])  # Armazena o nome da variável e seu valor
+
 
 # Regra para os valores possíveis (inteiro, decimal, ou string)
 def p_valor(p):
@@ -151,7 +160,7 @@ def p_valor(p):
 
 # Regra para expressões de adição
 def p_expression_adicao(p):
-    'expression : expression ADICAO expression'
+    '''expression : expression ADICAO expression'''
     p[0] = p[1] + p[3]
 
 # Regra para expressões de adição de variaveis
@@ -267,6 +276,10 @@ def p_escreva_variavel(p):
     'expression : ESCREVA ESQPARENTESE VARIAVEL DIRPARENTESE FINALEXPRESSAO'
     p[0] = (p[3])  # Armazena o comando 'escreva' e a expressão a ser impressa
 
+def p_leia(p):
+    'expression : LEIA ESQPARENTESE DIRPARENTESE FINALEXPRESSAO'
+    p[0] = (p[1])  # Armazena o comando 'leia'
+
 
 def p_error(p):
     if p:
@@ -277,16 +290,6 @@ def p_error(p):
 parser = yacc.yacc()
 
 teste = '''
-i = 2;
-a = 4;
-
-se i >= a:
-    escreva("funcionou");
-senao:
-escreva("não funcionou!");
-
-for i entre faixa (5);
-escreva("foi");
 
 '''
 
@@ -299,4 +302,4 @@ for tok in lexer:
 # Etapa 2: Análise Sintática
 print("\nResultado da análise sintática e semântica:")
 resultado = parser.parse(teste)
-print(f"Resultado: Código rodando sem erros sintáticos ou semânticos.")
+print(f"Resultado: {resultado}")
