@@ -188,6 +188,27 @@ def p_parentese_expr(p):
     'term : ESQPARENTESE expression DIRPARENTESE'
     p[0] = p[2]
 
+# Regra para o laço 'for'
+def p_for(p):
+    '''expression : FOR VARIAVEL ENTRE FAIXA ESQPARENTESE INTEIRO DIRPARENTESE FINALEXPRESSAO bloco'''
+    p[0] = ('for', p[2], p[4], p[6], p[8])  # Armazena o laço: variável, valor inicial, valor final, e o bloco do corpo
+
+# Regra para o corpo do 'for', que pode ser uma ou mais expressões
+def p_bloco(p):
+    '''bloco : expression
+             | bloco expression'''
+    p[0] = p[1:]  # Armazena o corpo do bloco com suas expressõe
+
+# Regra para o comando 'escreva'
+def p_escreva_expressao(p):
+    'expression : ESCREVA ESQPARENTESE expression DIRPARENTESE FINALEXPRESSAO'
+    p[0] = (p[3])  # Armazena o comando 'escreva' e a expressão a ser impressa
+
+def p_escreva_variavel(p):
+    'expression : ESCREVA ESQPARENTESE VARIAVEL DIRPARENTESE FINALEXPRESSAO'
+    p[0] = (p[3])  # Armazena o comando 'escreva' e a expressão a ser impressa
+
+
 def p_error(p):
     if p:
         print(f"Erro de sintaxe próximo ao token: {p.value}")
@@ -197,9 +218,8 @@ def p_error(p):
 parser = yacc.yacc()
 
 teste = '''
-a = 2;
-b = "teste";
-c = (2 + 2) * (3 + 3);
+for i entre faixa (5);
+escreva (i);
 
 '''
 
