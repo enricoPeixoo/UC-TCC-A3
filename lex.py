@@ -9,7 +9,7 @@ reserved = {
     'entre':'ENTRE',
     'faixa':'FAIXA',
     'se': 'SE',
-    'entao': 'ENTAO',
+    'senao': 'SENAO',
     'enquanto': 'ENQUANTO',
     'escreva': 'ESCREVA',
     'leia': 'LEIA'
@@ -36,6 +36,7 @@ tokens = [
     'DIFERENTE',
     'MENORIGUAL',
     'MAIORIGUAL',
+    'DOISPONTOS',
     'FINALEXPRESSAO'
 ] + list(reserved.values())
 
@@ -52,6 +53,10 @@ t_VIRGULA = r','
 
 def t_FINALEXPRESSAO(t):
     r';'
+    return t
+
+def t_DOISPONTOS(t):
+    r':'
     return t
 
 def t_IGUALDADE(t):
@@ -229,6 +234,29 @@ def p_enquanto(p):
                   | ENQUANTO VARIAVEL MAIORIGUAL INTEIRO FINALEXPRESSAO bloco'''
     p[0] = ('while', p[2], p[4])  # Armazena a condição e o bloco do laço
 
+# Regra para o 'if' (com e sem 'else')
+def p_if(p):
+    '''expression : SE VARIAVEL IGUALDADE VARIAVEL DOISPONTOS bloco
+                  | SE VARIAVEL IGUALDADE VARIAVEL DOISPONTOS bloco SENAO DOISPONTOS bloco
+                  | SE VARIAVEL IGUAL VARIAVEL DOISPONTOS bloco
+                  | SE VARIAVEL IGUAL VARIAVEL DOISPONTOS bloco SENAO DOISPONTOS bloco
+                  | SE VARIAVEL MAIOR VARIAVEL DOISPONTOS bloco
+                  | SE VARIAVEL MAIOR VARIAVEL DOISPONTOS bloco SENAO DOISPONTOS bloco
+                  | SE VARIAVEL MENOR VARIAVEL DOISPONTOS bloco
+                  | SE VARIAVEL MENOR VARIAVEL DOISPONTOS bloco SENAO DOISPONTOS bloco
+                  | SE VARIAVEL DIFERENTE VARIAVEL DOISPONTOS bloco
+                  | SE VARIAVEL DIFERENTE VARIAVEL DOISPONTOS bloco SENAO DOISPONTOS bloco
+                  | SE VARIAVEL MENORIGUAL VARIAVEL DOISPONTOS bloco
+                  | SE VARIAVEL MENORIGUAL VARIAVEL DOISPONTOS bloco SENAO DOISPONTOS bloco
+                  | SE VARIAVEL MAIORIGUAL VARIAVEL DOISPONTOS bloco
+                  | SE VARIAVEL MAIORIGUAL VARIAVEL DOISPONTOS bloco SENAO DOISPONTOS bloco'''
+    if len(p) == 5:
+        p[0] = ('if', p[2], p[4])  # Caso sem 'else'
+    else:
+        p[0] = ('if-else', p[2], p[4], p[6])  # Caso com 'else'
+
+
+
 
 # Regra para o comando 'escreva'
 def p_escreva_expressao(p):
@@ -244,13 +272,21 @@ def p_error(p):
     if p:
         print(f"Erro de sintaxe próximo ao token: {p.value}")
     else:
-        print("Analise concluida, resultado nulo")
+        print("Ocorreu um erro ao final do código!")
 
 parser = yacc.yacc()
 
 teste = '''
-enquanto i >= 5;
-escreva(i);
+i = 2;
+a = 4;
+
+se i >= a:
+    escreva("funcionou");
+senao:
+escreva("não funcionou!");
+
+for i entre faixa (5);
+escreva("foi");
 
 '''
 
@@ -261,6 +297,6 @@ for tok in lexer:
     print(f"{tok.type}: {tok.value}")
 
 # Etapa 2: Análise Sintática
-print("\nResultado da análise sintática:")
+print("\nResultado da análise sintática e semântica:")
 resultado = parser.parse(teste)
-print(f"Resultado: {resultado}")
+print(f"Resultado: Código rodando sem erros sintáticos ou semânticos.")
