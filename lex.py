@@ -245,7 +245,14 @@ def p_enquanto(p):
                   | ENQUANTO VARIAVEL IGUALDADE INTEIRO DOISPONTOS bloco
                   | ENQUANTO VARIAVEL DIFERENTE INTEIRO DOISPONTOS bloco
                   | ENQUANTO VARIAVEL MENORIGUAL INTEIRO DOISPONTOS bloco
-                  | ENQUANTO VARIAVEL MAIORIGUAL INTEIRO DOISPONTOS bloco'''
+                  | ENQUANTO VARIAVEL MAIORIGUAL INTEIRO DOISPONTOS bloco
+                  | ENQUANTO VARIAVEL MENOR VARIAVEL DOISPONTOS bloco
+                  | ENQUANTO VARIAVEL MAIOR VARIAVEL DOISPONTOS bloco
+                  | ENQUANTO VARIAVEL IGUAL VARIAVEL DOISPONTOS bloco
+                  | ENQUANTO VARIAVEL IGUALDADE VARIAVEL DOISPONTOS bloco
+                  | ENQUANTO VARIAVEL DIFERENTE VARIAVEL DOISPONTOS bloco
+                  | ENQUANTO VARIAVEL MENORIGUAL VARIAVEL DOISPONTOS bloco
+                  | ENQUANTO VARIAVEL MAIORIGUAL VARIAVEL DOISPONTOS bloco'''
     p[0] = ('while', (p[3], p[2], p[4]), p[6])  # ('while', (condição, variável, valor), bloco)
 
 def p_if_else(p):
