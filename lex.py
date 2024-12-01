@@ -255,7 +255,14 @@ def p_if_else(p):
                   | SE VARIAVEL MAIOR VARIAVEL DOISPONTOS bloco SENAO DOISPONTOS bloco
                   | SE VARIAVEL MENORIGUAL VARIAVEL DOISPONTOS bloco SENAO DOISPONTOS bloco
                   | SE VARIAVEL MAIORIGUAL VARIAVEL DOISPONTOS bloco SENAO DOISPONTOS bloco
-                  | SE VARIAVEL IGUALDADE VARIAVEL DOISPONTOS bloco SENAO DOISPONTOS bloco'''
+                  | SE VARIAVEL IGUALDADE VARIAVEL DOISPONTOS bloco SENAO DOISPONTOS bloco
+                  | SE VARIAVEL DIFERENTE INTEIRO DOISPONTOS bloco SENAO DOISPONTOS bloco
+                  | SE VARIAVEL MENOR INTEIRO DOISPONTOS bloco SENAO DOISPONTOS bloco
+                  | SE VARIAVEL MAIOR INTEIRO DOISPONTOS bloco SENAO DOISPONTOS bloco
+                  | SE VARIAVEL MENORIGUAL INTEIRO DOISPONTOS bloco SENAO DOISPONTOS bloco
+                  | SE VARIAVEL MAIORIGUAL INTEIRO DOISPONTOS bloco SENAO DOISPONTOS bloco
+                  | SE VARIAVEL IGUALDADE INTEIRO DOISPONTOS bloco SENAO DOISPONTOS bloco
+                  | SE VARIAVEL IGUAL INTEIRO DOISPONTOS bloco SENAO DOISPONTOS bloco''' 
     # Realizar a comparação manualmente para diferentes operadores
 
     if p[3] == '=':
@@ -470,11 +477,11 @@ def mostrar_erro(mensagem_erro):
 
 # Cria a interface principal
 janela = tk.Tk()
-janela.title("Tradutor de Linguagem Customizada para Python")
+janela.title("Tradutor de Linguagem Neskython(Nossa linguagem criada) para Python")
 janela.geometry("800x600")
 
 # Campo de entrada de código customizado
-frame_entrada = ttk.LabelFrame(janela, text="Código na Linguagem Criada por Nós")
+frame_entrada = ttk.LabelFrame(janela, text="Código na Linguagem Neskython")
 frame_entrada.pack(fill="both", expand=True, padx=10, pady=10)
 
 entrada_codigo = tk.Text(frame_entrada, height=15, wrap="word")
