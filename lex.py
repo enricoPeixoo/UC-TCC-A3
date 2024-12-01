@@ -116,7 +116,8 @@ def t_newline(t):
 t_ignore = ' \t'
 
 def t_error(t):
-    print("Caracter Ilegal! '%s'" % t.value[0])
+    mensagem_erro = f"Caracter Ilegal! '{t.value[0]}' na linha {t.lexer.lineno}"
+    mostrar_erro(mensagem_erro)
     t.lexer.skip(1)
 
 lexer = lex.lex()
@@ -282,7 +283,14 @@ def p_if(p):
                   | SE VARIAVEL MAIOR VARIAVEL DOISPONTOS bloco
                   | SE VARIAVEL MENORIGUAL VARIAVEL DOISPONTOS bloco
                   | SE VARIAVEL MAIORIGUAL VARIAVEL DOISPONTOS bloco
-                  | SE VARIAVEL IGUALDADE VARIAVEL DOISPONTOS bloco'''
+                  | SE VARIAVEL IGUALDADE VARIAVEL DOISPONTOS bloco
+                  | SE VARIAVEL DIFERENTE INTEIRO DOISPONTOS bloco
+                  | SE VARIAVEL MENOR INTEIRO DOISPONTOS bloco
+                  | SE VARIAVEL MAIOR INTEIRO DOISPONTOS bloco
+                  | SE VARIAVEL MENORIGUAL INTEIRO DOISPONTOS bloco
+                  | SE VARIAVEL MAIORIGUAL INTEIRO DOISPONTOS bloco
+                  | SE VARIAVEL IGUALDADE INTEIRO DOISPONTOS bloco
+                  | SE VARIAVEL IGUAL INTEIRO DOISPONTOS bloco'''
     # Comparação manual entre as duas variáveis
     if p[3] == '=':
         p[0] = ('if', p[2], '=', p[4], p[6])
@@ -358,12 +366,12 @@ def traduzir_para_python(arvore, nivel=0):
             bloco_else = traduzir_para_python(arvore[5], nivel + 1)
             return f"{'    ' * nivel}if {var1} {operador} {var2}:\n{bloco_if}\n{'    ' * nivel}else:\n{bloco_else}"
 
-        # Escreva (print)
+ # Escreva (print) - Verifica se é uma variável ou uma string
         elif comando == 'escreva':
-                if isinstance(arvore[1], str):
-                    return f"{'    ' * nivel}print(\"{arvore[1]}\")"
-                else:
-                    return f"{'    ' * nivel}print({traduzir_para_python(arvore[1], nivel)})"
+            if isinstance(arvore[1], str):
+                return f"{'    ' * nivel}print(\"{arvore[1]}\")"  # Para strings, coloca aspas
+            else:
+                return f"{'    ' * nivel}print({traduzir_para_python(arvore[1], nivel)})"  # Para variáveis, não coloca aspas
         
         # Leia (input)
         elif comando == 'leia':
@@ -376,9 +384,11 @@ def indentar(texto):
 
 def p_error(p):
     if p:
-        print(f"Erro de sintaxe próximo ao token: {p.value}")
+        mensagem_erro = f"Erro de sintaxe próximo ao token: {p.value} na linha {p.lineno}"
+        mostrar_erro(mensagem_erro)
     else:
-        print("Ocorreu um erro ao final do código!")
+        mensagem_erro = "Ocorreu um erro no código do código!"
+        mostrar_erro(mensagem_erro)
 
 parser = yacc.yacc()
 
@@ -444,7 +454,19 @@ def traduzir_codigo():
     except Exception as e:
         # Exibe mensagens de erro no campo de saída
         saida_codigo.delete("1.0", tk.END)
-        saida_codigo.insert(tk.END, f"Erro: {str(e)}")
+        erro = f"Erro: {str(e)}"
+        saida_codigo.insert(tk.END, erro)
+
+def mostrar_erro(mensagem_erro):
+    erro_janela = tk.Toplevel() 
+    erro_janela.title("Erro")
+    erro_janela.geometry("400x200")
+
+    label_erro = tk.Label(erro_janela, text=mensagem_erro, wraplength=350)
+    label_erro.pack(pady=20)
+
+    botao_fechar = ttk.Button(erro_janela, text="Fechar", command=erro_janela.destroy)
+    botao_fechar.pack(pady=10)
 
 # Cria a interface principal
 janela = tk.Tk()
@@ -452,7 +474,7 @@ janela.title("Tradutor de Linguagem Customizada para Python")
 janela.geometry("800x600")
 
 # Campo de entrada de código customizado
-frame_entrada = ttk.LabelFrame(janela, text="Código na Linguagem Customizada")
+frame_entrada = ttk.LabelFrame(janela, text="Código na Linguagem Criada por Nós")
 frame_entrada.pack(fill="both", expand=True, padx=10, pady=10)
 
 entrada_codigo = tk.Text(frame_entrada, height=15, wrap="word")
