@@ -1,5 +1,7 @@
 import ply.lex as lex
 import ply.yacc as yacc
+import tkinter as tk
+from tkinter import ttk
 
 
 
@@ -358,7 +360,10 @@ def traduzir_para_python(arvore, nivel=0):
 
         # Escreva (print)
         elif comando == 'escreva':
-            return f"{'    ' * nivel}print({traduzir_para_python(arvore[1], nivel)})"
+                if isinstance(arvore[1], str):
+                    return f"{'    ' * nivel}print(\"{arvore[1]}\")"
+                else:
+                    return f"{'    ' * nivel}print({traduzir_para_python(arvore[1], nivel)})"
         
         # Leia (input)
         elif comando == 'leia':
@@ -423,3 +428,46 @@ codigo_python = traduzir_para_python(arvore)
 # Etapa 3: Imprima o código traduzido
 print("Código traduzido para Python:")
 print(codigo_python)
+
+# Função para traduzir o código
+def traduzir_codigo():
+    # Obtém o código do campo de entrada
+    codigo_customizado = entrada_codigo.get("1.0", tk.END)
+    try:
+        # Realiza a análise sintática
+        arvore = parser.parse(codigo_customizado)
+        # Traduz para Python
+        codigo_python = traduzir_para_python(arvore)
+        # Exibe o código traduzido no campo de saída
+        saida_codigo.delete("1.0", tk.END)
+        saida_codigo.insert(tk.END, codigo_python)
+    except Exception as e:
+        # Exibe mensagens de erro no campo de saída
+        saida_codigo.delete("1.0", tk.END)
+        saida_codigo.insert(tk.END, f"Erro: {str(e)}")
+
+# Cria a interface principal
+janela = tk.Tk()
+janela.title("Tradutor de Linguagem Customizada para Python")
+janela.geometry("800x600")
+
+# Campo de entrada de código customizado
+frame_entrada = ttk.LabelFrame(janela, text="Código na Linguagem Customizada")
+frame_entrada.pack(fill="both", expand=True, padx=10, pady=10)
+
+entrada_codigo = tk.Text(frame_entrada, height=15, wrap="word")
+entrada_codigo.pack(fill="both", expand=True, padx=5, pady=5)
+
+# Botão para traduzir o código
+botao_traduzir = ttk.Button(janela, text="Traduzir para Python", command=traduzir_codigo)
+botao_traduzir.pack(pady=5)
+
+# Campo de saída para o código Python traduzido
+frame_saida = ttk.LabelFrame(janela, text="Código Traduzido para Python")
+frame_saida.pack(fill="both", expand=True, padx=10, pady=10)
+
+saida_codigo = tk.Text(frame_saida, height=15, wrap="word")
+saida_codigo.pack(fill="both", expand=True, padx=5, pady=5)
+
+# Inicia o loop da interface
+janela.mainloop()
