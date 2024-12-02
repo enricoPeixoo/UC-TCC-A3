@@ -1,0 +1,67 @@
+Declarações de variavel:
+
+a = 3;
+b = 4.5;
+c = "teste";
+
+--------------------------------------------------------------
+
+If:
+
+a = 5;
+
+se a < 5:
+	escreva("Menor que 5");\
+
+---------------------------------------------------------------
+
+If/Else:
+
+a = 3;
+
+se a < 5:
+	escreva("Menor que 5");
+senao:
+	escreva("Maior que 5");
+
+---------------------------------------------------------------
+While:
+
+a = 2;
+b = 4;
+
+enquanto a < b:
+	escreva("teste while");
+
+
+---------------------------------------------------------------
+
+For:
+
+for i entre faixa (5):
+	escreva("teste for");
+
+---------------------------------------------------------------
+Teste Código completo:
+
+escreva("Digite A: ");
+a = leia();
+escreva("Digite B: ");
+b = leia();
+
+se a < b:
+    c = a + b;
+senao:
+    c = a - b;
+
+enquanto a <= 10:
+    escreva("Menor que 10");
+
+for i entre faixa (5):
+    escreva("teste");
+
+
+escreva("C é igual a");
+escreva(c);
+
+d = a + b;
